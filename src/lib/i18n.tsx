@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 export type Locale = 'en' | 'tr';
 
@@ -1145,19 +1145,19 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   const dict = useMemo(() => (locale === 'tr' ? TR : EN), [locale]);
 
-  const setLocale = (next: Locale) => {
+  const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
       // ignore
     }
-  };
+  }, []);
 
-  const t = (key: string, vars?: Record<string, string | number>) => {
+  const t = useCallback((key: string, vars?: Record<string, string | number>) => {
     const raw = dict[key] ?? EN[key] ?? key;
     return interpolate(raw, vars);
-  };
+  }, [dict]);
 
   useEffect(() => {
     // keep <html lang="..."> in sync
@@ -1168,7 +1168,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     }
   }, [locale]);
 
-  const value = useMemo<I18nContextValue>(() => ({ locale, setLocale, t }), [locale]);
+  const value = useMemo<I18nContextValue>(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

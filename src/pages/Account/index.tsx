@@ -9,6 +9,38 @@ import { Button } from '@/components/ui/button';
 import { tempoTestnet } from '@/lib/chains/tempoTestnet';
 import { useI18n } from '@/lib/i18n';
 
+type RequestFn = (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+
+type Eip1193Provider = {
+  request?: RequestFn;
+  on?: (event: string, listener: (...args: unknown[]) => void) => void;
+  off?: (event: string, listener: (...args: unknown[]) => void) => void;
+  removeListener?: (event: string, listener: (...args: unknown[]) => void) => void;
+};
+
+function getInjectedEthereum(): unknown {
+  if (typeof window === 'undefined') return undefined;
+  return (window as unknown as { ethereum?: unknown }).ethereum;
+}
+
+function hasRequest(value: unknown): value is { request: RequestFn } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'request' in value &&
+    typeof (value as { request?: unknown }).request === 'function'
+  );
+}
+
+function hasGetProvider(value: unknown): value is { getProvider: () => Promise<unknown> } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'getProvider' in value &&
+    typeof (value as { getProvider?: unknown }).getProvider === 'function'
+  );
+}
+
 function StatusPill({ ok, label }: { ok: boolean; label: string }) {
   return (
     <span
@@ -36,16 +68,12 @@ export default function Account() {
   const [walletReportedChainId, setWalletReportedChainId] = useState<number | null>(null);
   const [isWalletChainIdKnown, setIsWalletChainIdKnown] = useState(false);
 
-  const browserWalletRequest: ((args: { method: string; params?: unknown[] }) => Promise<unknown>) | null =
-    typeof window !== 'undefined' && typeof (window as any)?.ethereum?.request === 'function'
-      ? ((window as any).ethereum.request as (args: { method: string; params?: unknown[] }) => Promise<unknown>)
-      : null;
+  const injectedEthereum = getInjectedEthereum();
+  const browserWalletRequest: RequestFn | null = hasRequest(injectedEthereum) ? injectedEthereum.request : null;
 
   useEffect(() => {
     let cancelled = false;
-    let activeProvider: any | null = null;
-
-    type RequestFn = (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+    let activeProvider: Eip1193Provider | null = null;
 
     function parseChainId(hex: unknown): number | null {
       if (typeof hex !== 'string') return null;
@@ -59,7 +87,8 @@ export default function Account() {
       setIsWalletChainIdKnown(next !== null);
     }
 
-    const handleChainChanged = (nextChainIdHex: unknown) => {
+    const handleChainChanged = (...args: unknown[]) => {
+      const [nextChainIdHex] = args;
       setKnownChainId(parseChainId(nextChainIdHex));
     };
 
@@ -67,17 +96,19 @@ export default function Account() {
       try {
         // Prefer the *active connector's* provider when connected (WalletConnect, Coinbase, Injected, etc.)
         // so we don't accidentally read from a different installed wallet extension.
-        if (isConnected && connector && typeof (connector as any).getProvider === 'function') {
+        if (isConnected && connector && hasGetProvider(connector)) {
           try {
-            activeProvider = await (connector as any).getProvider();
+            const provider = await connector.getProvider();
+            activeProvider = typeof provider === 'object' && provider !== null ? (provider as Eip1193Provider) : null;
           } catch {
             activeProvider = null;
           }
         }
 
         // If not connected, fall back to injected browser wallet (MetaMask/Coinbase extension) if present.
-        if (!activeProvider && typeof window !== 'undefined') {
-          activeProvider = (window as any)?.ethereum ?? null;
+        if (!activeProvider) {
+          const injected = getInjectedEthereum();
+          activeProvider = typeof injected === 'object' && injected !== null ? (injected as Eip1193Provider) : null;
         }
 
         const request: RequestFn | null =
@@ -122,7 +153,6 @@ export default function Account() {
   }, [isConnected, connector, walletClient, chainId]);
 
   const isOnTempo = isConnected && isWalletChainIdKnown && walletReportedChainId === tempoTestnet.id;
-  const isWrongNetwork = isConnected && isWalletChainIdKnown && walletReportedChainId !== tempoTestnet.id;
   const isNetworkUnknown = isConnected && !isWalletChainIdKnown;
   const canAddTempoNetwork = Boolean(browserWalletRequest ?? walletClient?.request);
 

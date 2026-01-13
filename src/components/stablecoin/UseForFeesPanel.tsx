@@ -1342,7 +1342,7 @@ export function UseForFeesPanel() {
             <span className="font-semibold text-amber-700 dark:text-amber-300">FAILED</span>
           )}
           <span className="ml-2 text-[11px] text-gray-500 dark:text-gray-500">
-            If preflight is OK but the wallet shows "Internal JSON-RPC error", it’s usually a wallet/provider/RPC issue masking the revert.
+            If preflight is OK but the wallet shows &quot;Internal JSON-RPC error&quot;, it’s usually a wallet/provider/RPC issue masking the revert.
           </span>
         </div>
 

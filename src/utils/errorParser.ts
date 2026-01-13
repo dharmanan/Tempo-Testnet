@@ -1,4 +1,25 @@
-import { decodeErrorResult } from 'viem';
+import { decodeErrorResult, type Abi } from 'viem';
+
+type UnknownRecord = Record<string, unknown>;
+
+function asRecord(value: unknown): UnknownRecord | null {
+  return typeof value === 'object' && value !== null ? (value as UnknownRecord) : null;
+}
+
+function getNested(value: unknown, path: string[]): unknown {
+  let current: unknown = value;
+  for (const key of path) {
+    const record = asRecord(current);
+    if (!record) return undefined;
+    current = record[key];
+  }
+  return current;
+}
+
+function getNestedString(value: unknown, path: string[]): string | null {
+  const v = getNested(value, path);
+  return typeof v === 'string' ? v : null;
+}
 
 const BUILTIN_REVERT_ABI = [
   {
@@ -11,20 +32,20 @@ const BUILTIN_REVERT_ABI = [
     name: 'Panic',
     inputs: [{ name: 'code', type: 'uint256' }],
   },
-] as const;
+] as const satisfies Abi;
 
-function findRevertDataHex(err: any): `0x${string}` | null {
+function findRevertDataHex(err: unknown): `0x${string}` | null {
   const candidates: unknown[] = [
-    err?.data,
-    err?.data?.data,
-    err?.cause?.data,
-    err?.cause?.data?.data,
-    err?.cause?.error?.data,
-    err?.cause?.error?.data?.data,
-    err?.error?.data,
-    err?.error?.data?.data,
-    err?.cause?.cause?.data,
-    err?.cause?.cause?.data?.data,
+    getNested(err, ['data']),
+    getNested(err, ['data', 'data']),
+    getNested(err, ['cause', 'data']),
+    getNested(err, ['cause', 'data', 'data']),
+    getNested(err, ['cause', 'error', 'data']),
+    getNested(err, ['cause', 'error', 'data', 'data']),
+    getNested(err, ['error', 'data']),
+    getNested(err, ['error', 'data', 'data']),
+    getNested(err, ['cause', 'cause', 'data']),
+    getNested(err, ['cause', 'cause', 'data', 'data']),
   ];
 
   for (const c of candidates) {
@@ -39,13 +60,16 @@ function findRevertDataHex(err: any): `0x${string}` | null {
 
 function decodeBuiltinRevert(data: `0x${string}`): string | null {
   try {
-    const decoded = decodeErrorResult({ abi: BUILTIN_REVERT_ABI as any, data }) as any;
+    const decoded = decodeErrorResult({ abi: BUILTIN_REVERT_ABI, data }) as unknown as {
+      errorName?: string;
+      args?: readonly unknown[];
+    };
     if (decoded.errorName === 'Error') {
-      const msg = String((decoded.args as any)?.[0] ?? '').trim();
+      const msg = String(decoded.args?.[0] ?? '').trim();
       return msg ? msg : null;
     }
     if (decoded.errorName === 'Panic') {
-      const code = (decoded.args as any)?.[0];
+      const code = decoded.args?.[0];
       const hex = typeof code === 'bigint' ? `0x${code.toString(16)}` : String(code ?? '').trim();
       return hex ? `Panic (${hex})` : 'Panic';
     }
@@ -56,17 +80,19 @@ function decodeBuiltinRevert(data: `0x${string}`): string | null {
 }
 
 export function parseContractError(error: unknown): string {
-  const e = error as any;
-  const message = String(e?.shortMessage ?? e?.message ?? e?.details ?? e ?? '');
-  const lower = message.toLowerCase();
+  const message =
+    getNestedString(error, ['shortMessage']) ??
+    getNestedString(error, ['message']) ??
+    getNestedString(error, ['details']) ??
+    String(error ?? '');
 
   // viem/wagmi + MetaMask often wrap revert details in nested objects.
   // Try to pull out the most specific hint we can find.
   const nestedMessage =
-    (typeof e?.cause?.shortMessage === 'string' && e.cause.shortMessage) ||
-    (typeof e?.cause?.message === 'string' && e.cause.message) ||
-    (typeof e?.data?.message === 'string' && e.data.message) ||
-    (typeof e?.error?.message === 'string' && e.error.message) ||
+    getNestedString(error, ['cause', 'shortMessage']) ||
+    getNestedString(error, ['cause', 'message']) ||
+    getNestedString(error, ['data', 'message']) ||
+    getNestedString(error, ['error', 'message']) ||
     null;
   const combined = nestedMessage ? `${message}\n${nestedMessage}` : message;
   const combinedLower = combined.toLowerCase();
@@ -75,7 +101,7 @@ export function parseContractError(error: unknown): string {
 
   // If we have raw revert data, try to decode a concrete revert string even when
   // wallet/RPC surfaces an empty message.
-  const revertData = findRevertDataHex(e);
+  const revertData = findRevertDataHex(error);
   const decodedBuiltin = revertData ? decodeBuiltinRevert(revertData) : null;
 
   const selectorMatch = combined.match(/0x[0-9a-fA-F]{8}/);

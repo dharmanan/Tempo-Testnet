@@ -8,7 +8,6 @@ import {
   Droplet,
   LayoutDashboard,
   Inbox,
-  Plus,
   Send,
   Settings,
   TrendingUp,

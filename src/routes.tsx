@@ -9,7 +9,6 @@ import Tokens from '@/pages/Tokens';
 import TokensLayout from '@/pages/Tokens/Layout';
 import DEX from '@/pages/DEX';
 import Contracts from '@/pages/Contracts';
-import CreateToken from '@/pages/CreateToken';
 import Liquidity from '@/pages/Liquidity';
 import IssuanceLayout from '@/pages/Issuance/Layout';
 import IssuanceCreate from '@/pages/Issuance/Create';
