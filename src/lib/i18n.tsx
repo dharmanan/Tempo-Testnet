@@ -318,6 +318,10 @@ const EN: Dict = {
   'issuance.fees.ammTitle': 'Fee AMM Liquidity (Step 1)',
   'issuance.fees.addLiquidityFirst': 'Step 1: Add validator-token liquidity so fees can be swapped.',
   'issuance.fees.systemTokenWarning': 'Tip: If you see “Insufficient liquidity for fee token”, add liquidity to the pool against the active proposer’s preferred token (often PathUSD).',
+  'issuance.fees.validatorTokenMismatchWarning':
+    'Warning: selected validator token differs from the current proposer preference. You may need liquidity in both pools.',
+  'issuance.fees.quoteTokenNote':
+    'Note: quoteToken ({quoteToken}) is used for DEX pricing/routing and does not need to match the validator fee token.',
   'issuance.fees.prefTitle': 'Fee Token Preference (Step 2)',
   'issuance.fees.prefSubtitle': 'This sets your account-level fee token preference via FeeManager. Only works after you have added liquidity above.',
   'issuance.fees.prefCtaTitle': 'Fee token tip',
@@ -343,7 +347,22 @@ const EN: Dict = {
   'issuance.fees.userToken': 'User token',
   'issuance.fees.validatorToken': 'Validator token',
   'issuance.fees.poolReserves': 'Pool reserves',
+  'issuance.fees.refresh': 'Refresh',
+  'issuance.fees.poolReadyTitle': 'Pool ready for fee swaps',
+  'issuance.fees.poolReadyBody':
+    'Validator reserve is > 0. You can set {userSymbol} as your fee token (account preference), and the protocol can swap fees into {validatorSymbol}.',
+  'issuance.fees.addValidatorLiquidityTitle': 'Add validator liquidity',
+  'issuance.fees.addValidatorLiquidityBody':
+    'To pay fees with {userSymbol}, this pool needs {validatorSymbol} liquidity. Deposit {validatorSymbol} into the Fee AMM pool for ({userSymbol}, {validatorSymbol}).',
+  'issuance.fees.poolEmptyInitNote':
+    'Pool is empty (0/0). Initializing with validator token only is supported by the Fee AMM spec.',
   'issuance.fees.amountSymbol': 'Amount {symbol}',
+  'issuance.fees.placeholderUserAmountOptional': '1 (optional)',
+  'issuance.fees.placeholderUserAmountZero': '0',
+  'issuance.fees.userAmountHelpEmpty':
+    'Pool is empty (0/0). Initialization on Tempo is validator-token-only (set {userSymbol} amount to 0).',
+  'issuance.fees.userAmountHelpOptional':
+    'Optional. Use a non-zero {userSymbol} amount to add user-side reserve after initialization.',
   'issuance.fees.allowances': 'Allowances:',
   'issuance.fees.balances': 'Balances:',
   'issuance.fees.insufficientBalance': 'Insufficient {symbol} balance. Mint tokens first, then add liquidity.',
@@ -353,6 +372,23 @@ const EN: Dict = {
   'issuance.fees.burnLiquidityLabel': 'Burn liquidity (raw units)',
   'issuance.fees.burnLiquidity': 'Burn Liquidity',
   'issuance.fees.burnStatus': 'Burn status: {status}',
+  'issuance.fees.liquidityRawIntegerNote':
+    'Liquidity is a raw integer (uint256). It is not a {userSymbol}/{validatorSymbol} amount and has no decimals shown here.',
+  'issuance.fees.quickFill': 'Quick fill:',
+  'issuance.fees.burnTipTryOne':
+    'Tip: try 1 first. If it fails with {error}, this wallet owns 0 liquidity for this pool.',
+  'issuance.fees.findingMaxBurnable': 'Finding max burnable…',
+  'issuance.fees.findMaxBurnable': 'Find max burnable',
+  'issuance.fees.enterPositiveInteger': 'Enter a positive integer (raw uint256).',
+  'issuance.fees.burnPreflightFailed':
+    'Burn preflight failed — the value may be higher than your liquidity balance, or the pool is not burnable from this wallet.',
+  'issuance.fees.poolReserveLabel': 'Pool reserve ({symbol}):',
+  'issuance.fees.preflightLabel': 'Preflight:',
+  'issuance.fees.preflightChecking': 'Checking…',
+  'issuance.fees.preflightOkShort': 'OK',
+  'issuance.fees.preflightFailedShort': 'FAILED',
+  'issuance.fees.preflightWalletHint':
+    'If preflight is OK but the wallet shows "Internal JSON-RPC error", it’s usually a wallet/provider/RPC issue masking the revert.',
 
   // Issuance: Rewards
   'issuance.rewards.enterAddress': 'Enter a Stablecoin address at the top to manage rewards.',
@@ -898,6 +934,10 @@ const TR: Dict = {
   'issuance.fees.ammTitle': 'Ücret AMM Likiditesi (Adım 1)',
   'issuance.fees.addLiquidityFirst': 'Adım 1: Ücret swap’ının çalışması için validator token tarafına likidite ekle.',
   'issuance.fees.systemTokenWarning': 'İpucu: “Insufficient liquidity for fee token” görürsen, aktif proposer’ın tercih ettiği token’a (çoğunlukla PathUSD) karşı havuza likidite ekle.',
+  'issuance.fees.validatorTokenMismatchWarning':
+    'Uyarı: Seçtiğin validator token, mevcut proposer tercihiyle farklı. İki havuzda da likidite gerekebilir.',
+  'issuance.fees.quoteTokenNote':
+    'Not: quoteToken ({quoteToken}) DEX fiyatlama/yönlendirme içindir; validator fee token ile aynı olmak zorunda değil.',
   'issuance.fees.prefTitle': 'Ücret Token Tercihi (Adım 2)',
   'issuance.fees.prefSubtitle': 'Bu, FeeManager üzerinden hesap bazında ücret token tercihini ayarlar. Sadece yukarıdan likidite ekledikten sonra çalışır.',
   'issuance.fees.prefCtaTitle': 'Ücret tokenı ipucu',
@@ -923,7 +963,22 @@ const TR: Dict = {
   'issuance.fees.userToken': 'Kullanıcı tokenı',
   'issuance.fees.validatorToken': 'Validator tokenı',
   'issuance.fees.poolReserves': 'Havuz rezervleri',
+  'issuance.fees.refresh': 'Yenile',
+  'issuance.fees.poolReadyTitle': 'Havuz ücret swap’ına hazır',
+  'issuance.fees.poolReadyBody':
+    'Validator rezervi > 0. {userSymbol} tokenını ücret tokenın olarak seçebilirsin (hesap tercihi) ve protokol ücretleri {validatorSymbol} tokenına çevirebilir.',
+  'issuance.fees.addValidatorLiquidityTitle': 'Validator likiditesi ekle',
+  'issuance.fees.addValidatorLiquidityBody':
+    '{userSymbol} ile ücret ödemek için bu havuzda {validatorSymbol} likiditesi olmalı. ({userSymbol}, {validatorSymbol}) Fee AMM havuzuna {validatorSymbol} yatır.',
+  'issuance.fees.poolEmptyInitNote':
+    'Havuz boş (0/0). Fee AMM spesine göre ilk kurulumda sadece validator token ile başlatma desteklenir.',
   'issuance.fees.amountSymbol': '{symbol} tutarı',
+  'issuance.fees.placeholderUserAmountOptional': '1 (opsiyonel)',
+  'issuance.fees.placeholderUserAmountZero': '0',
+  'issuance.fees.userAmountHelpEmpty':
+    'Havuz boş (0/0). Tempo’da ilk kurulum sadece validator token ile yapılır ({userSymbol} tutarını 0 bırak).',
+  'issuance.fees.userAmountHelpOptional':
+    'Opsiyonel. İlk kurulumdan sonra kullanıcı tarafı rezerv eklemek için {userSymbol} tutarını 0’dan büyük gir.',
   'issuance.fees.allowances': 'Allowance:',
   'issuance.fees.balances': 'Bakiyeler:',
   'issuance.fees.insufficientBalance': '{symbol} bakiyesi yetersiz. Önce token bas, sonra likidite ekle.',
@@ -933,6 +988,23 @@ const TR: Dict = {
   'issuance.fees.burnLiquidityLabel': 'Likidite yak (ham birim)',
   'issuance.fees.burnLiquidity': 'Likidite Yak',
   'issuance.fees.burnStatus': 'Yakma durumu: {status}',
+  'issuance.fees.liquidityRawIntegerNote':
+    'Likidite ham bir tam sayıdır (uint256). {userSymbol}/{validatorSymbol} tutarı değildir ve burada ondalık gösterilmez.',
+  'issuance.fees.quickFill': 'Hızlı doldur:',
+  'issuance.fees.burnTipTryOne':
+    'İpucu: önce 1 dene. Eğer {error} hatası alırsan bu cüzdanın bu havuzda 0 likiditesi var demektir.',
+  'issuance.fees.findingMaxBurnable': 'Yakılabilir maksimum aranıyor…',
+  'issuance.fees.findMaxBurnable': 'Maksimum yakılabilir bul',
+  'issuance.fees.enterPositiveInteger': 'Pozitif bir tam sayı gir (ham uint256).',
+  'issuance.fees.burnPreflightFailed':
+    'Yakma preflight başarısız — değer likidite bakiyenden yüksek olabilir veya bu cüzdandan yakılamıyor olabilir.',
+  'issuance.fees.poolReserveLabel': 'Havuz rezervi ({symbol}):',
+  'issuance.fees.preflightLabel': 'Preflight:',
+  'issuance.fees.preflightChecking': 'Kontrol ediliyor…',
+  'issuance.fees.preflightOkShort': 'OK',
+  'issuance.fees.preflightFailedShort': 'BAŞARISIZ',
+  'issuance.fees.preflightWalletHint':
+    'Preflight OK olsa bile cüzdan "Internal JSON-RPC error" gösteriyorsa, genelde revert’ü gizleyen bir cüzdan/provider/RPC problemidir.',
 
   // Issuance: Rewards
   'issuance.rewards.enterAddress': 'Ödülleri yönetmek için yukarıdan bir Stablecoin adresi gir.',

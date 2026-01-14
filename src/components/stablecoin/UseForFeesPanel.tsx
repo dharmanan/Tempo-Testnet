@@ -1034,13 +1034,12 @@ export function UseForFeesPanel() {
             </Select>
             {proposerPreferredTokenAddress && proposerPreferredTokenAddress.toLowerCase() !== validatorToken.toLowerCase() ? (
               <div className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-                Warning: selected validator token differs from the current proposer preference.
-                You may need liquidity in both pools.
+                {t('issuance.fees.validatorTokenMismatchWarning')}
               </div>
             ) : null}
             {userQuoteTokenAddress && userQuoteTokenAddress.toLowerCase() !== validatorToken.toLowerCase() ? (
               <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                Note: quoteToken ({userQuoteTokenAddress}) is used for DEX pricing/routing and does not need to match the validator fee token.
+                {t('issuance.fees.quoteTokenNote', { quoteToken: userQuoteTokenAddress })}
               </div>
             ) : null}
           </div>
@@ -1058,7 +1057,7 @@ export function UseForFeesPanel() {
                 className="h-8 px-3"
                 onClick={() => refetchPool()}
               >
-                Refresh
+                {t('issuance.fees.refresh')}
               </Button>
             </div>
           </div>
@@ -1081,20 +1080,20 @@ export function UseForFeesPanel() {
         {/* Pool state info */}
         {isPoolReadyForFeePayments ? (
           <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-200">
-            <div className="font-semibold">Pool ready for fee swaps</div>
+            <div className="font-semibold">{t('issuance.fees.poolReadyTitle')}</div>
             <div className="mt-1 text-xs opacity-90">
-              Validator reserve is &gt; 0. You can set {sUser} as your fee token (account preference), and the protocol can swap fees into {sVal}.
+              {t('issuance.fees.poolReadyBody', { userSymbol: sUser, validatorSymbol: sVal })}
             </div>
           </div>
         ) : (
           <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-200">
-            <div className="font-semibold">Add validator liquidity</div>
+            <div className="font-semibold">{t('issuance.fees.addValidatorLiquidityTitle')}</div>
             <div className="mt-1 text-xs opacity-90">
-              To pay fees with {sUser}, this pool needs {sVal} liquidity. Deposit {sVal} into the Fee AMM pool for ({sUser}, {sVal}).
+              {t('issuance.fees.addValidatorLiquidityBody', { userSymbol: sUser, validatorSymbol: sVal })}
             </div>
             {isPoolEmpty ? (
               <div className="mt-2 text-xs opacity-90">
-                Pool is empty (0/0). Initializing with validator token only is supported by the Fee AMM spec.
+                {t('issuance.fees.poolEmptyInitNote')}
               </div>
             ) : null}
           </div>
@@ -1106,14 +1105,14 @@ export function UseForFeesPanel() {
             <Input
               value={amountUser}
               onChange={(e) => setAmountUser(e.target.value)}
-              placeholder={canDualSidedMint ? `1 (optional)` : '0'}
+              placeholder={canDualSidedMint ? t('issuance.fees.placeholderUserAmountOptional') : t('issuance.fees.placeholderUserAmountZero')}
               className="mt-2"
               disabled={!canDualSidedMint}
             />
             <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               {!canDualSidedMint
-                ? `Pool is empty (0/0). Initialization on Tempo is validator-token-only (set ${sUser} amount to 0).`
-                : `Optional. Use a non-zero ${sUser} amount to add user-side reserve after initialization.`}
+                ? t('issuance.fees.userAmountHelpEmpty', { userSymbol: sUser })
+                : t('issuance.fees.userAmountHelpOptional', { userSymbol: sUser })}
             </div>
           </div>
 
@@ -1224,11 +1223,11 @@ export function UseForFeesPanel() {
             />
 
             <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-              Liquidity is a raw integer (uint256). It is not {sUser}/{sVal} amount and has no decimals shown here.
+              {t('issuance.fees.liquidityRawIntegerNote', { userSymbol: sUser, validatorSymbol: sVal })}
             </div>
 
             <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-              <span>Quick fill:</span>
+              <span>{t('issuance.fees.quickFill')}</span>
               {burnPresets.map((v) => (
                 <Button
                   key={v}
@@ -1244,7 +1243,7 @@ export function UseForFeesPanel() {
             </div>
 
             <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-              Tip: try <span className="font-mono">1</span> first. If it fails with <span className="font-mono">InsufficientLiquidity</span>, this wallet owns 0 liquidity for this pool.
+              {t('issuance.fees.burnTipTryOne', { error: 'InsufficientLiquidity' })}
             </div>
 
             <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -1258,10 +1257,10 @@ export function UseForFeesPanel() {
                 {isFindingMaxBurn ? (
                   <span className="inline-flex items-center justify-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Finding max burnable…
+                    {t('issuance.fees.findingMaxBurnable')}
                   </span>
                 ) : (
-                  'Find max burnable'
+                  t('issuance.fees.findMaxBurnable')
                 )}
               </Button>
 
@@ -1275,12 +1274,12 @@ export function UseForFeesPanel() {
             </Button>
 
             {requiredBurnLiq == null && liquidityToBurn.trim() ? (
-              <div className="mt-2 text-xs text-amber-700 dark:text-amber-300">Enter a positive integer (raw uint256).</div>
+              <div className="mt-2 text-xs text-amber-700 dark:text-amber-300">{t('issuance.fees.enterPositiveInteger')}</div>
             ) : null}
 
             {requiredBurnLiq != null && !burnPreflight.isSuccess ? (
               <div className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-                Burn preflight failed — the value may be higher than your liquidity balance, or the pool is not burnable from this wallet.
+                {t('issuance.fees.burnPreflightFailed')}
               </div>
             ) : null}
 
@@ -1316,7 +1315,7 @@ export function UseForFeesPanel() {
         <div className="mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-700 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-200">
           <div className="font-semibold">{t('issuance.fees.quickCheckTitle')}</div>
           <div className="mt-1">
-            Pool reserve ({sVal}):{' '}
+            {t('issuance.fees.poolReserveLabel', { symbol: sVal })}{' '}
             <span className={typeof reserveVal === 'bigint' && reserveVal > 0n ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-300'}>
               {typeof reserveVal === 'bigint' ? formatUnits(reserveVal, dVal) : '—'}
             </span>
@@ -1330,19 +1329,19 @@ export function UseForFeesPanel() {
         ) : null}
 
         <div className="mt-3 text-xs text-gray-600 dark:text-gray-400">
-          Preflight:{' '}
+          {t('issuance.fees.preflightLabel')}{' '}
           {setUserTokenPreflight.isLoading ? (
             <span className="inline-flex items-center gap-2">
               <Loader2 className="h-3 w-3 animate-spin" />
-              Checking…
+              {t('issuance.fees.preflightChecking')}
             </span>
           ) : setUserTokenPreflight.isSuccess ? (
-            <span className="font-semibold text-emerald-700 dark:text-emerald-300">OK</span>
+            <span className="font-semibold text-emerald-700 dark:text-emerald-300">{t('issuance.fees.preflightOkShort')}</span>
           ) : (
-            <span className="font-semibold text-amber-700 dark:text-amber-300">FAILED</span>
+            <span className="font-semibold text-amber-700 dark:text-amber-300">{t('issuance.fees.preflightFailedShort')}</span>
           )}
           <span className="ml-2 text-[11px] text-gray-500 dark:text-gray-500">
-            If preflight is OK but the wallet shows &quot;Internal JSON-RPC error&quot;, it’s usually a wallet/provider/RPC issue masking the revert.
+            {t('issuance.fees.preflightWalletHint')}
           </span>
         </div>
 
@@ -1479,7 +1478,7 @@ export function UseForFeesPanel() {
               '—'
             )}
             {typeof onchainUserPrefToken === 'string' && userToken && isAddress(onchainUserPrefToken) && onchainUserPrefToken.toLowerCase() === userToken.toLowerCase() ? (
-              <span className="ml-2 font-semibold text-emerald-700 dark:text-emerald-300">OK</span>
+              <span className="ml-2 font-semibold text-emerald-700 dark:text-emerald-300">{t('issuance.fees.preflightOkShort')}</span>
             ) : null}
           </p>
           <p>
