@@ -27,9 +27,11 @@ export function MainLayout({ children }: { children: ReactNode }) {
       <Header />
       <div className="mx-auto flex w-full max-w-6xl px-4">
         <Sidebar isOpen={sidebarOpen} />
-        <main className="min-h-[calc(100vh-4rem)] flex-1 p-4 sm:p-6 lg:ml-64">{children}</main>
+        <div className="min-h-[calc(100vh-4rem)] flex flex-1 flex-col lg:ml-64">
+          <main className="flex-1 p-4 sm:p-6">{children}</main>
+          <Footer />
+        </div>
       </div>
-      <Footer />
     </div>
   );
 }
