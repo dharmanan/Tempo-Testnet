@@ -1270,9 +1270,6 @@ function detectDefaultLocale(): Locale {
   } catch {
     // ignore
   }
-
-  const lang = (typeof navigator !== 'undefined' ? navigator.language : '').toLowerCase();
-  if (lang.startsWith('tr')) return 'tr';
   return 'en';
 }
 

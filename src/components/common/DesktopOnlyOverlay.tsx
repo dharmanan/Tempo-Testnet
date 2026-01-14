@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useI18n } from '@/lib/i18n';
 
 const STORAGE_KEY = 'tempo.desktopOnlyDismissed:v1';
 
@@ -27,7 +26,6 @@ function useMediaQuery(query: string): boolean {
 }
 
 export function DesktopOnlyOverlay() {
-  const { t } = useI18n();
   const isSmallScreen = useMediaQuery('(max-width: 767px)');
 
   const [dismissed, setDismissed] = useState<boolean>(() => {
@@ -49,8 +47,10 @@ export function DesktopOnlyOverlay() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900">
-        <h2 className="text-lg font-bold">{t('app.desktopOnly.title')}</h2>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{t('app.desktopOnly.body')}</p>
+        <h2 className="text-lg font-bold">Best on desktop</h2>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          This app is optimized for desktop screens. You can continue on mobile, but some flows may not work smoothly.
+        </p>
 
         <div className="mt-4 flex flex-col gap-2">
           <Button
@@ -64,7 +64,7 @@ export function DesktopOnlyOverlay() {
               setDismissed(true);
             }}
           >
-            {t('app.desktopOnly.continue')}
+            Continue anyway
           </Button>
 
           <a
@@ -80,7 +80,7 @@ export function DesktopOnlyOverlay() {
               }
             }}
           >
-            {t('app.desktopOnly.tip')}
+            Tip: copy this link and open on desktop
           </a>
         </div>
       </div>

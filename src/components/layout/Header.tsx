@@ -18,7 +18,7 @@ export function Header() {
   };
 
   const headerLinkClassName =
-    'inline-flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 ' +
+    'inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 ' +
     'transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800';
 
   return (
@@ -44,29 +44,29 @@ export function Header() {
               {t('header.appTitle')}
             </span>
 
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="ml-3 flex shrink-0 items-center gap-2">
               <a
-                href="https://x.com/KohenEric"
+                href="https://x.com/tempo"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="X"
                 title="X"
                 className={headerLinkClassName + ' hover:text-[#1d9bf0]'}
               >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18.6 2H22l-7.43 8.49L23.5 22h-6.9l-5.4-7.06L4.6 22H1.2l7.95-9.08L.5 2h7.1l4.88 6.33L18.6 2Zm-1.2 18h1.88L6.6 3.9H4.58L17.4 20Z" />
                 </svg>
               </a>
 
               <a
-                href="https://github.com/dharmanan/Tempo-Testnet"
+                href="https://github.com/tempoxyz"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub"
                 title="GitHub"
                 className={headerLinkClassName}
               >
-                <Github className="h-4 w-4" />
+                <Github className="h-5 w-5" />
               </a>
 
               <a
@@ -77,7 +77,7 @@ export function Header() {
                 title="Docs"
                 className={headerLinkClassName}
               >
-                <BookOpen className="h-4 w-4" />
+                <BookOpen className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -87,7 +87,7 @@ export function Header() {
             aria-label="Language"
             value={locale}
             onChange={(e) => setLocale(e.target.value as 'en' | 'tr')}
-            className="hidden h-9 rounded-md border border-gray-200 bg-white px-2 text-sm font-medium text-gray-700 outline-none hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 sm:block"
+            className="h-9 w-[5.75rem] rounded-md border border-gray-200 bg-white px-2 text-sm font-medium text-gray-700 outline-none hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 sm:w-auto"
           >
             <option value="en">{t('lang.english')}</option>
             <option value="tr">{t('lang.turkish')}</option>
