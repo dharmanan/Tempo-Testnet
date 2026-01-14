@@ -526,7 +526,7 @@ const EN: Dict = {
     'Place limit orders on the orderbook to provide liquidity. This is not an AMM “add liquidity / LP token” flow.',
   'page.liquidity.mmNotice.title': 'What is this?',
   'page.liquidity.mmNotice.body':
-    'You are placing buy/sell orders around the market price so swaps and fee conversions can execute. Your orders may fill, converting your balance into the other token; this is normal market-maker behavior.',
+    'ETH/USDC is just an example; the logic is the same.\n\nSwap: you exchange immediately.\nHere: you place limit orders ("open a shop").\n- "If ETH is $3,000, I sell 1 ETH"\n- "If ETH is $2,950, I buy 1 ETH"\n\nOn this page you only pick one token: the other side (quote token) is defined by that token’s contract and used automatically by the orderbook.',
   'page.liquidity.poolTitle': 'Pool',
   'page.liquidity.mode.simple': 'Simple',
   'page.liquidity.mode.orderbookTools': 'Orderbook tools',
@@ -1099,7 +1099,7 @@ const TR: Dict = {
     'Emir defterine limit emirler koyarak likidite sağla. Bu, AMM’de “likidite ekle / LP token” akışı değildir.',
   'page.liquidity.mmNotice.title': 'Bu sayfa ne yapıyor?',
   'page.liquidity.mmNotice.body':
-    'Orta fiyatın etrafına alış/satış emirleri yerleştirirsin; böylece swap’ler ve fee dönüşümleri çalışır. Emirlerin dolabilir ve bakiyen diğer tokene dönüşebilir; bu piyasa yapıcılığının normal sonucudur.',
+    'ETH/USDC sadece örnektir; mantık aynıdır.\n\nSwap: anında takas yaparsın.\nBurada: limit emir koyarsın ("tezgâh açarsın").\n- "ETH $3.000 olursa 1 ETH satarım"\n- "ETH $2.950 olursa 1 ETH alırım"\n\nBu sayfada sadece bir token seçersin: diğer taraf (quote token) o tokenın kontratında tanımlıdır ve emir defterinde otomatik kullanılır.',
   'page.liquidity.poolTitle': 'Havuz',
   'page.liquidity.mode.simple': 'Basit',
   'page.liquidity.mode.orderbookTools': 'Orderbook araçları',

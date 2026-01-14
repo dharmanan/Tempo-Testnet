@@ -460,7 +460,7 @@ export default function Liquidity() {
 
         <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-300">
           <div className="font-semibold">{t('page.liquidity.mmNotice.title')}</div>
-          <div className="mt-1">{t('page.liquidity.mmNotice.body')}</div>
+          <div className="mt-1 whitespace-pre-line">{t('page.liquidity.mmNotice.body')}</div>
         </div>
       </div>
 
