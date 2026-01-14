@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
 import { useAppStore } from '@/store';
+import { DesktopOnlyOverlay } from '@/components/common/DesktopOnlyOverlay';
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const sidebarOpen = useAppStore((state) => state.sidebarOpen);
@@ -22,6 +23,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen">
+      <DesktopOnlyOverlay />
       <Header />
       <div className="mx-auto flex w-full max-w-6xl px-4">
         <Sidebar isOpen={sidebarOpen} />

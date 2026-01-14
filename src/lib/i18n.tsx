@@ -520,6 +520,13 @@ const EN: Dict = {
 
   'page.common.token': 'Token',
 
+  // App: Desktop-only notice
+  'app.desktopOnly.title': 'Desktop recommended',
+  'app.desktopOnly.body':
+    'This app is not fully optimized for mobile screens yet. For the best experience, open it on a desktop/laptop browser.',
+  'app.desktopOnly.continue': 'Continue anyway',
+  'app.desktopOnly.tip': 'Tip: copy this page link and open on desktop',
+
   // Pages: Liquidity
   'page.liquidity.title': 'Market Making',
   'page.liquidity.subtitle':
@@ -1092,6 +1099,13 @@ const TR: Dict = {
   'page.dex.quoteUnavailableHint': 'Genelde bu, çiftte henüz likidite/sipariş olmadığı (veya tokenın DEX tarafından desteklenmediği) anlamına gelir.',
 
   'page.common.token': 'Token',
+
+  // App: Desktop-only notice
+  'app.desktopOnly.title': 'Masaüstü önerilir',
+  'app.desktopOnly.body':
+    'Bu uygulama henüz mobil ekranlar için tam optimize değil. En iyi deneyim için masaüstü/laptop tarayıcıda aç.',
+  'app.desktopOnly.continue': 'Yine de devam et',
+  'app.desktopOnly.tip': 'İpucu: linki kopyalayıp masaüstünde aç',
 
   // Pages: Liquidity
   'page.liquidity.title': 'Piyasa Yapıcılığı',

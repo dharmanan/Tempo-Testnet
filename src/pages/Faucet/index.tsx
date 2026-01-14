@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useFaucet } from '@/hooks/contracts/useFaucet';
 import { addRecentToken } from '@/lib/recentTokens';
 import { useI18n } from '@/lib/i18n';
+import { formatDecimalStringRounded } from '@/utils/formatters';
 
 const ERC20_ABI = [
   {
@@ -219,7 +220,7 @@ export default function Faucet() {
                         <ExternalLink className="h-3.5 w-3.5" />
                       </a>
                     </div>
-                    <span className="font-mono">{row.value}</span>
+                    <span className="font-mono">{formatDecimalStringRounded(row.value, { fractionDigits: 2, groupSeparator: ',' })}</span>
                   </div>
                 ))}
               </div>
