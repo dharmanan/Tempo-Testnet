@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { ABIS } from '@/contracts/abis';
 import { TESTNET_ADDRESSES } from '@/contracts/addresses/testnet';
 import { useI18n } from '@/lib/i18n';
+import { formatDecimalStringRounded } from '@/utils/formatters';
 
 type AssetKey = 'PathUSD' | 'AlphaUSD' | 'BetaUSD' | 'ThetaUSD';
 
@@ -103,7 +104,17 @@ export default function Transfer() {
 
   const balances = useMemo(() => {
     const map: Partial<
-      Record<AssetKey, { raw: bigint; decimals: number; formatted: string; symbol: string; tokenAddress?: `0x${string}` }>
+      Record<
+        AssetKey,
+        {
+          raw: bigint;
+          decimals: number;
+          formatted: string;
+          displayFormatted: string;
+          symbol: string;
+          tokenAddress?: `0x${string}`;
+        }
+      >
     > = {};
 
     for (let i = 0; i < tokenAddresses.length; i++) {
@@ -111,10 +122,12 @@ export default function Transfer() {
       const balanceResult = tokenBalancesQuery.data?.[i * 2 + 1]?.result;
       const decimals = typeof decimalsResult === 'number' ? decimalsResult : 6;
       const raw = typeof balanceResult === 'bigint' ? balanceResult : 0n;
+      const formatted = formatUnits(raw, decimals);
       map[tokenAddresses[i].key] = {
         raw,
         decimals,
-        formatted: formatUnits(raw, decimals),
+        formatted,
+        displayFormatted: formatDecimalStringRounded(formatted, { fractionDigits: 2, groupSeparator: ',' }),
         symbol: tokenAddresses[i].key,
         tokenAddress: tokenAddresses[i].address,
       };
@@ -219,7 +232,7 @@ export default function Transfer() {
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">{t('page.transfer.balanceLabel')}:</span>
                   <span className="font-mono">
-                    {selectedBalance.formatted} {selectedBalance.symbol}
+                    {selectedBalance.displayFormatted} {selectedBalance.symbol}
                   </span>
                   {selectedBalance.tokenAddress ? (
                     <a
