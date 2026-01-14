@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
-import { TESTNET_ADDRESSES } from '@/contracts/addresses/testnet';
 import { addRecentToken, loadRecentTokens, subscribeRecentTokensUpdates } from '@/lib/recentTokens';
 import { CONTRACTS } from '@/config/contracts';
 import { useI18n } from '@/lib/i18n';
