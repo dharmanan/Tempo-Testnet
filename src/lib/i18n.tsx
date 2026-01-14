@@ -20,6 +20,12 @@ const EN: Dict = {
   'header.wrongNetwork': 'Wrong network',
   'header.network': 'Network',
 
+  // Footer
+  'footer.title': 'Tempo Testnet App (Unofficial)',
+  'footer.disclaimer':
+    'This is an unofficial community-made guide and demo UI for the Tempo testnet, built using publicly available Tempo documentation and deployed contract interfaces. Not affiliated with Tempo.',
+  'footer.copyright': '© {year} Tempo Testnet App. All rights reserved.',
+
   // Sidebar
   'nav.dashboard': 'Dashboard',
   'nav.account': 'Account',
@@ -640,6 +646,12 @@ const TR: Dict = {
   'header.connect': 'Bağlan',
   'header.wrongNetwork': 'Yanlış ağ',
   'header.network': 'Ağ',
+
+  // Footer
+  'footer.title': 'Tempo Testnet App (Resmi değil)',
+  'footer.disclaimer':
+    'Bu site Tempo testnet için topluluk tarafından hazırlanmış resmi olmayan bir rehber ve demo arayüzüdür. Tempo\'nun herkese açık dokümanları ve yayınlanmış kontrat arayüzleri kullanılarak hazırlanmıştır. Tempo ile bağlantılı değildir.',
+  'footer.copyright': '© {year} Tempo Testnet App. Tüm hakları saklıdır.',
 
   // Sidebar
   'nav.dashboard': 'Panel',
