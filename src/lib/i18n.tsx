@@ -318,6 +318,12 @@ const EN: Dict = {
   'issuance.fees.ammTitle': 'Fee AMM Liquidity (Step 1)',
   'issuance.fees.addLiquidityFirst': 'Step 1: Add validator-token liquidity so fees can be swapped.',
   'issuance.fees.systemTokenWarning': 'Tip: If you see “Insufficient liquidity for fee token”, add liquidity to the pool against the active proposer’s preferred token (often PathUSD).',
+  'issuance.fees.currencyMismatch': 'Currency: "{currency}" (FeeManager requires "USD")',
+  'issuance.fees.currencyOk': 'Currency: "USD"',
+  'issuance.fees.quoteTokenLabel': 'Quote Token: {quoteToken}',
+  'issuance.fees.validatorTokenGeneric': 'validator token',
+  'issuance.fees.activeProposerPrefers':
+    'Active proposer {proposer} prefers {preferredToken}. Add fee liquidity to the pool ({userSymbol}, {validatorSymbol}).',
   'issuance.fees.validatorTokenMismatchWarning':
     'Warning: selected validator token differs from the current proposer preference. You may need liquidity in both pools.',
   'issuance.fees.quoteTokenNote':
@@ -934,6 +940,12 @@ const TR: Dict = {
   'issuance.fees.ammTitle': 'Ücret AMM Likiditesi (Adım 1)',
   'issuance.fees.addLiquidityFirst': 'Adım 1: Ücret swap’ının çalışması için validator token tarafına likidite ekle.',
   'issuance.fees.systemTokenWarning': 'İpucu: “Insufficient liquidity for fee token” görürsen, aktif proposer’ın tercih ettiği token’a (çoğunlukla PathUSD) karşı havuza likidite ekle.',
+  'issuance.fees.currencyMismatch': 'Currency: "{currency}" (FeeManager "USD" ister)',
+  'issuance.fees.currencyOk': 'Currency: "USD"',
+  'issuance.fees.quoteTokenLabel': 'Quote Token: {quoteToken}',
+  'issuance.fees.validatorTokenGeneric': 'validator token',
+  'issuance.fees.activeProposerPrefers':
+    'Aktif proposer {proposer}, {preferredToken} tercih ediyor. ({userSymbol}, {validatorSymbol}) havuzuna ücret likiditesi ekle.',
   'issuance.fees.validatorTokenMismatchWarning':
     'Uyarı: Seçtiğin validator token, mevcut proposer tercihiyle farklı. İki havuzda da likidite gerekebilir.',
   'issuance.fees.quoteTokenNote':

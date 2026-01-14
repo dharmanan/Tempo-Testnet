@@ -986,21 +986,20 @@ export function UseForFeesPanel() {
             <div className="mt-2 font-mono text-xs text-gray-600 dark:text-gray-400">{userToken}</div>
             {typeof userCurrency === 'string' && userCurrency !== 'USD' ? (
               <div className="mt-1 text-xs text-red-600 dark:text-red-400">
-                Currency: &quot;{userCurrency}&quot; (FeeManager requires &quot;USD&quot;)
+                {t('issuance.fees.currencyMismatch', { currency: userCurrency })}
               </div>
             ) : typeof userCurrency === 'string' && userCurrency === 'USD' ? (
               <>
                 <div className="mt-1 text-xs text-green-600 dark:text-green-400">
-                  Currency: &quot;USD&quot;
+                  {t('issuance.fees.currencyOk')}
                 </div>
                 {/* Show quoteToken for debugging */}
                 {typeof userQuoteToken === 'string' && (
                   <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    Quote Token: {userQuoteToken === known.PathUSD ? 'PathUSD' : 
-                                  userQuoteToken === known.AlphaUSD ? 'AlphaUSD' : 
-                                  userQuoteToken === known.BetaUSD ? 'BetaUSD' : 
-                                  userQuoteToken === known.ThetaUSD ? 'ThetaUSD' : 
-                                  userQuoteToken.slice(0, 10) + '...'}
+                    {t('issuance.fees.quoteTokenLabel', {
+                      quoteToken:
+                        formatKnownSymbol(userQuoteToken) ?? `${userQuoteToken.slice(0, 10)}...`,
+                    })}
                   </div>
                 )}
               </>
@@ -1011,11 +1010,12 @@ export function UseForFeesPanel() {
 
             {latestProposer && proposerPreferredTokenAddress ? (
               <div className="mt-2 rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-900 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-200">
-                Active proposer {latestProposer} prefers{' '}
-                <span className="font-semibold">
-                  {formatKnownSymbol(proposerPreferredTokenAddress) ?? proposerPreferredTokenAddress}
-                </span>
-                . Add fee liquidity to the pool ({sUser}, {formatKnownSymbol(proposerPreferredTokenAddress) ?? 'validator token'}).
+                {t('issuance.fees.activeProposerPrefers', {
+                  proposer: latestProposer,
+                  preferredToken: formatKnownSymbol(proposerPreferredTokenAddress) ?? proposerPreferredTokenAddress,
+                  userSymbol: sUser,
+                  validatorSymbol: formatKnownSymbol(proposerPreferredTokenAddress) ?? t('issuance.fees.validatorTokenGeneric'),
+                })}
               </div>
             ) : null}
 
