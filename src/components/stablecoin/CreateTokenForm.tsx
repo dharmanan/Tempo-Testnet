@@ -15,6 +15,7 @@ import { parseContractError } from '@/utils/errorParser';
 import { cn } from '@/lib/utils';
 import { addRecentToken } from '@/lib/recentTokens';
 import { useI18n } from '@/lib/i18n';
+import { markTaskCompleted } from '@/lib/taskProgressStorage';
 
 type Address = `0x${string}`;
 
@@ -95,6 +96,13 @@ export function CreateTokenForm() {
       return null;
     }
   }, [createReceipt.data]);
+
+  useEffect(() => {
+    if (!address) return;
+    if (!isTempo) return;
+    if (!createReceipt.isSuccess) return;
+    markTaskCompleted(chainId, address, 'create_token_once', { txHash: createHash });
+  }, [address, chainId, createHash, createReceipt.isSuccess, isTempo]);
 
   const quoteTokenLabel = useMemo(() => {
     const lowered = quoteToken.toLowerCase();
