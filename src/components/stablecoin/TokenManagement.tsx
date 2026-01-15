@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { Shield, PauseCircle, PlayCircle, KeyRound } from 'lucide-react';
@@ -39,6 +39,7 @@ export function TokenManagement() {
   const { t } = useI18n();
   const chainId = useChainId();
   const isTempo = chainId === tempoTestnet.id;
+  const explorerBaseUrl = tempoTestnet.blockExplorers?.default?.url;
   const { address, isConnected } = useAccount();
   const [searchParams] = useSearchParams();
 
@@ -163,6 +164,12 @@ export function TokenManagement() {
     error: revokeError,
   } = useWriteContract();
   const revokeReceipt = useWaitForTransactionReceipt({ hash: revokeHash });
+
+  useEffect(() => {
+    if (grantReceipt.isSuccess || revokeReceipt.isSuccess) {
+      void roleHas.refetch();
+    }
+  }, [grantReceipt.isSuccess, revokeReceipt.isSuccess, roleHas.refetch]);
 
   if (!tokenAddress) {
     return (
@@ -348,13 +355,65 @@ export function TokenManagement() {
 
           <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
             {t('issuance.manage.grantStatus', {
-              status: grantReceipt.isLoading ? t('common.confirming') : grantReceipt.isSuccess ? t('common.confirmed') : '—',
+              status: isGrantPending
+                ? t('common.submitting')
+                : grantReceipt.isLoading
+                  ? t('common.confirming')
+                  : grantReceipt.isSuccess
+                    ? t('common.confirmed')
+                    : grantHash
+                      ? t('common.submitted')
+                      : '—',
             })}{' '}
             |{' '}
             {t('issuance.manage.revokeStatus', {
-              status: revokeReceipt.isLoading ? t('common.confirming') : revokeReceipt.isSuccess ? t('common.confirmed') : '—',
+              status: isRevokePending
+                ? t('common.submitting')
+                : revokeReceipt.isLoading
+                  ? t('common.confirming')
+                  : revokeReceipt.isSuccess
+                    ? t('common.confirmed')
+                    : revokeHash
+                      ? t('common.submitted')
+                      : '—',
             })}
           </div>
+
+          {(grantHash || revokeHash) && explorerBaseUrl ? (
+            <div className="mt-2 flex flex-col gap-1 text-xs text-gray-600 dark:text-gray-400">
+              {grantHash ? (
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="font-medium">Grant tx:</span>
+                  <a
+                    className="font-mono text-[#2F6E0C] underline underline-offset-2 hover:opacity-90 dark:text-[#66D121]"
+                    href={`${explorerBaseUrl}/tx/${grantHash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={grantHash}
+                  >
+                    {truncateHex(grantHash)}
+                  </a>
+                  <CopyButton value={grantHash} />
+                </div>
+              ) : null}
+
+              {revokeHash ? (
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="font-medium">Revoke tx:</span>
+                  <a
+                    className="font-mono text-[#2F6E0C] underline underline-offset-2 hover:opacity-90 dark:text-[#66D121]"
+                    href={`${explorerBaseUrl}/tx/${revokeHash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={revokeHash}
+                  >
+                    {truncateHex(revokeHash)}
+                  </a>
+                  <CopyButton value={revokeHash} />
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

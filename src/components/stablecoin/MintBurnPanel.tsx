@@ -56,6 +56,7 @@ export function MintBurnPanel() {
   const { t } = useI18n();
   const chainId = useChainId();
   const isTempo = chainId === tempoTestnet.id;
+  const explorerBaseUrl = tempoTestnet.blockExplorers?.default?.url;
   const { address, isConnected } = useAccount();
   const [searchParams] = useSearchParams();
 
@@ -76,7 +77,7 @@ export function MintBurnPanel() {
     functionName: 'decimals',
     query: { enabled: Boolean(isTempo && tokenAddress) },
   });
-  const { data: balance } = useReadContract({
+  const balanceRead = useReadContract({
     address: tokenAddress ?? undefined,
     abi: ABIS.TIP20Token,
     functionName: 'balanceOf',
@@ -84,18 +85,24 @@ export function MintBurnPanel() {
     query: { enabled: Boolean(isTempo && tokenAddress && address) },
   });
 
+  const balance = balanceRead.data;
+  const refetchBalance = balanceRead.refetch;
+
   const { data: paused } = useReadContract({
     address: tokenAddress ?? undefined,
     abi: ABIS.TIP20Token,
     functionName: 'paused',
     query: { enabled: Boolean(isTempo && tokenAddress) },
   });
-  const { data: totalSupply } = useReadContract({
+  const totalSupplyRead = useReadContract({
     address: tokenAddress ?? undefined,
     abi: ABIS.TIP20Token,
     functionName: 'totalSupply',
     query: { enabled: Boolean(isTempo && tokenAddress) },
   });
+
+  const totalSupply = totalSupplyRead.data;
+  const refetchTotalSupply = totalSupplyRead.refetch;
   const { data: supplyCap } = useReadContract({
     address: tokenAddress ?? undefined,
     abi: ABIS.TIP20Token,
@@ -113,11 +120,7 @@ export function MintBurnPanel() {
     functionName: 'ISSUER_ROLE',
     query: { enabled: Boolean(isTempo && tokenAddress) },
   });
-  const {
-    data: hasIssuerRole,
-    isLoading: hasIssuerRoleLoading,
-    error: hasIssuerRoleError,
-  } = useReadContract({
+  const hasIssuerRoleRead = useReadContract({
     address: tokenAddress ?? undefined,
     abi: ABIS.TIP20Token,
     functionName: 'hasRole',
@@ -127,6 +130,13 @@ export function MintBurnPanel() {
     account: address,
     query: { enabled: Boolean(isTempo && tokenAddress && issuerRole && address) },
   });
+
+  const {
+    data: hasIssuerRole,
+    isLoading: hasIssuerRoleLoading,
+    error: hasIssuerRoleError,
+  } = hasIssuerRoleRead;
+  const refetchHasIssuerRole = hasIssuerRoleRead.refetch;
 
   const d = typeof decimals === 'number' ? decimals : 6;
   const symbolText = typeof symbol === 'string' ? symbol : 'TOKEN';
@@ -182,6 +192,21 @@ export function MintBurnPanel() {
   const burnReceipt = useWaitForTransactionReceipt({ hash: burnHash });
 
   useEffect(() => {
+    if (mintReceipt.isSuccess) {
+      void refetchBalance();
+      void refetchTotalSupply();
+      void refetchHasIssuerRole();
+    }
+  }, [mintReceipt.isSuccess, refetchBalance, refetchHasIssuerRole, refetchTotalSupply]);
+
+  useEffect(() => {
+    if (burnReceipt.isSuccess) {
+      void refetchBalance();
+      void refetchTotalSupply();
+    }
+  }, [burnReceipt.isSuccess, refetchBalance, refetchTotalSupply]);
+
+  useEffect(() => {
     if (!chainId || !address || !tokenAddress) return;
 
     const mintTx = mintReceipt.data?.transactionHash;
@@ -227,6 +252,26 @@ export function MintBurnPanel() {
   const canBurn =
     Boolean(isConnected && isTempo && tokenAddress && burnAmount.trim().length > 0 && !burnMemoParsed.errorKey) &&
     !isBurnPending;
+
+  const mintStatusText = isMintPending
+    ? t('common.submitting')
+    : mintReceipt.isLoading
+      ? t('common.confirming')
+      : mintReceipt.isSuccess
+        ? t('common.confirmed')
+        : mintHash
+          ? t('common.submitted')
+          : '—';
+
+  const burnStatusText = isBurnPending
+    ? t('common.submitting')
+    : burnReceipt.isLoading
+      ? t('common.confirming')
+      : burnReceipt.isSuccess
+        ? t('common.confirmed')
+        : burnHash
+          ? t('common.submitted')
+          : '—';
 
   const submitMint = async () => {
     if (!tokenAddress) return;
@@ -483,9 +528,23 @@ export function MintBurnPanel() {
             </Button>
             <p className="text-xs text-gray-600 dark:text-gray-400">
               {t('issuance.mintburn.requiresRoleStatus', {
-                status: mintReceipt.isLoading ? t('common.confirming') : mintReceipt.isSuccess ? t('common.confirmed') : '—',
+                status: mintStatusText,
               })}
             </p>
+
+            {mintHash && explorerBaseUrl ? (
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                <a
+                  className="font-mono text-[#2F6E0C] underline underline-offset-2 hover:opacity-90 dark:text-[#66D121]"
+                  href={`${explorerBaseUrl}/tx/${mintHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={mintHash}
+                >
+                  {t('page.transfer.viewTxOnExplorer')}
+                </a>
+              </p>
+            ) : null}
           </div>
         </div>
 
@@ -527,9 +586,23 @@ export function MintBurnPanel() {
             </Button>
             <p className="text-xs text-gray-600 dark:text-gray-400">
               {t('issuance.mintburn.burnStatus', {
-                status: burnReceipt.isLoading ? t('common.confirming') : burnReceipt.isSuccess ? t('common.confirmed') : '—',
+                status: burnStatusText,
               })}
             </p>
+
+            {burnHash && explorerBaseUrl ? (
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                <a
+                  className="font-mono text-[#2F6E0C] underline underline-offset-2 hover:opacity-90 dark:text-[#66D121]"
+                  href={`${explorerBaseUrl}/tx/${burnHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={burnHash}
+                >
+                  {t('page.transfer.viewTxOnExplorer')}
+                </a>
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
