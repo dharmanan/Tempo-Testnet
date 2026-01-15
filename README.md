@@ -2,14 +2,20 @@
 
 A small web app for interacting with the **Tempo Moderato Testnet** (wallet connect, faucet, transfers, token tools, and the Stablecoin DEX).
 
+Important:
+- This is an **unofficial** community-made demo UI / guide, built using publicly available Tempo docs and deployed contract interfaces.
+- Not affiliated with Tempo.
+
+Live (production): https://tempo-testnet.vercel.app
+
 ## What you can do
 
 - View your testnet token balances
 - Claim faucet funds
 - Send TIP-20 tokens
-- Create a test token
+- Create & manage TIP-20 stablecoins (issuance)
 - Swap stablecoins
-- Provide liquidity (simple mode by default, advanced tools available)
+- Provide liquidity / market making (advanced tools available)
 - Check useful contract addresses / links
 
 ## Getting started
@@ -25,8 +31,12 @@ npm install
 2) Create your env file
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
+
+Notes:
+- Prefer `.env.local` for local development (do not commit it).
+- The repo ignores `.env*.local` by default.
 
 If you deploy the app under a subpath (e.g. GitHub Pages), set:
 
@@ -34,9 +44,11 @@ If you deploy the app under a subpath (e.g. GitHub Pages), set:
 
 3) (Optional) Set WalletConnect project id
 
-Open `.env` and set:
+Open `.env.local` and set:
 
 - `VITE_WALLETCONNECT_PROJECT_ID=`
+
+If you want iOS/Safari users to see mobile wallet options in the Connect modal, a WalletConnect Project ID is required.
 
 4) Run locally
 
@@ -50,6 +62,12 @@ Build / preview:
 npm run build
 npm run preview
 ```
+
+## Deployment
+
+### Vercel
+
+This repo includes a `vercel.json` configured for Vite + SPA routing. In Vercel Project Settings, set any needed env vars (e.g. `VITE_WALLETCONNECT_PROJECT_ID`) and deploy.
 
 ## Add Tempo Testnet to your wallet
 
@@ -70,6 +88,10 @@ Most wallets will prompt you to switch networks when you connect. If you need to
 - This app targets **Tempo Moderato Testnet** (chain id `42431`). If your wallet is on the wrong network, the UI will ask you to switch.
 - RPC default: `https://rpc.moderato.tempo.xyz`
 - Explorer: `https://explore.tempo.xyz`
+
+## Copyright
+
+© Tempo Testnet App. All rights reserved.
 
 ## Scripts
 
