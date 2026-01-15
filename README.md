@@ -18,6 +18,16 @@ Live (production): https://tempo-testnet.vercel.app
 - Provide liquidity / market making (advanced tools available)
 - Check useful contract addresses / links
 
+## Screenshots
+
+Light mode:
+
+<img src="public/Light.png" alt="Tempo Testnet App — Light mode" width="100%" style="pointer-events: none;" />
+
+Dark mode:
+
+<img src="public/dark.png" alt="Tempo Testnet App — Dark mode" width="100%" style="pointer-events: none;" />
+
 ## Getting started
 
 **Requirements:** Node.js 18+ and npm.
