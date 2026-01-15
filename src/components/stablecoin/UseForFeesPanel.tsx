@@ -25,7 +25,8 @@ export function UseForFeesPanel() {
 
   const debugEnabled = useMemo(() => {
     const q = (searchParams.get('debug') ?? '').trim();
-    return Boolean(import.meta.env.DEV || q === '1' || q.toLowerCase() === 'true');
+    // Keep production builds clean: allow debug logs only in dev.
+    return Boolean(import.meta.env.DEV && (q === '1' || q.toLowerCase() === 'true'));
   }, [searchParams]);
 
   const debug = useMemo(() => {
