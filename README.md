@@ -8,6 +8,8 @@ Important:
 
 Live (production): https://tempo-testnet.vercel.app
 
+YouTube demo: https://www.youtube.com/watch?v=PM1m87ASxmQ
+
 ## What you can do
 
 - View your testnet token balances
